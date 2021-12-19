@@ -9,7 +9,7 @@
     "start": "ts-node src/index.ts"
   },
   "keywords": [],
-  "author": "Sajid Ali",
+  "author": "Sajid Ali <asajid451@gmail.com>",
   "license": "ISC",
   "devDependencies": {
     "@types/express": "^4.17.13",
