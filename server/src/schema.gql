@@ -1,0 +1,25 @@
+ Query {
+   machine(where: MachineWhereUniqInput!): Machine
+   machines: [Machine!]
+   sensorData(id: ID!, from: DateTime!, to: DateTime!): [SensorDataPoint]
+ } 
+ 
+type Machine {
+  name: String 
+  sensors: [Sensor]
+  lastKnownPosition: GPSPosition
+}
+type Sensor {
+  name: String
+  machine: Machine
+}
+
+type SensorDataPoint {
+  timestamp: Date
+  value: number
+}
+
+type GPSPosition {
+  lat: number
+  lang: number
+}
