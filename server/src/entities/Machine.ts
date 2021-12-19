@@ -1,9 +1,4 @@
-import {
-  Entity,
-  OneToMany,
-  PrimaryKey,
-  Property,
-} from "@mikro-orm/core";
+import { Entity, OneToMany, PrimaryKey, Property } from "@mikro-orm/core";
 import { ObjectType, Field, ID } from "type-graphql";
 import { Sensor } from "./Sensor";
 
@@ -30,6 +25,6 @@ export class Machine {
   @Property({ type: "date", onUpdate: () => new Date() })
   updatedAt = new Date();
 
-  @OneToMany(() => Sensor, sensor => [sensor])
+  @OneToMany(() => Sensor, (sensor) => [sensor])
   sensors: Sensor[];
 }

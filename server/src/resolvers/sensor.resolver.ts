@@ -24,7 +24,6 @@ export class SensorResolver {
     @Arg("input", () => CreateSensorInput) input: CreateSensorInput,
     @Ctx() { em }: MyContext
   ): Promise<Sensor> {
-    console.log("🚀 ~ file: sensor.resolver.ts ~ line 27 ~ SensorResolver ~ input", input)
     const sensor = em.create(Sensor, { name: input?.name, machine: input?.machine_id });
     await em.persistAndFlush(sensor);
     return sensor;
