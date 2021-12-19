@@ -1,17 +1,26 @@
 import { Machine, Sensor } from "../entities";
 import { MyContext } from "src/types";
-import { Resolver, Query, Ctx, Arg, Int, Mutation, FieldResolver, Root } from "type-graphql";
+import {
+  Resolver,
+  Query,
+  Ctx,
+  Arg,
+  Int,
+  Mutation,
+  FieldResolver,
+  Root,
+} from "type-graphql";
 import { CreateInput } from "../dto";
 
 @Resolver(() => Machine)
 export class MachineResolver {
   @Query(() => [Machine])
-  machineList(@Ctx() { em }: MyContext): Promise<Machine[]> {
+  machines(@Ctx() { em }: MyContext): Promise<Machine[]> {
     return em.find(Machine, {});
   }
 
   @Query(() => Machine, { nullable: true })
-  getMachineById(
+  machine(
     @Arg("id", () => Int) id: number,
     @Ctx() { em }: MyContext
   ): Promise<Machine | null> {
@@ -53,8 +62,11 @@ export class MachineResolver {
   }
 
   @FieldResolver(() => [Sensor])
-  async sensors(@Root() machine: Machine, @Ctx() { em }: MyContext): Promise<any[]> {
+  async sensors(
+    @Root() machine: Machine,
+    @Ctx() { em }: MyContext
+  ): Promise<any[]> {
     const repo = em.getRepository(Sensor);
-    return repo.find({ machine:  machine.id});
-  } 
+    return repo.find({ machine: machine.id });
+  }
 }
