@@ -5,9 +5,8 @@ import { ApolloServer } from "apollo-server-express";
 import { buildSchema } from "type-graphql";
 
 import { __prod__ } from "./constants";
-// import { Post } from "./entities/Post";
 import mikroOrmConfig from "./mikro-orm.config";
-import { PostResolver, MachineResolver, SensorResolver } from "./resolvers";
+import { MachineResolver, SensorResolver } from "./resolvers";
 
 const main = async () => {
   const ORM = await MikroORM.init(mikroOrmConfig);
@@ -18,7 +17,7 @@ const main = async () => {
 
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
-      resolvers: [PostResolver, MachineResolver, SensorResolver],
+      resolvers: [MachineResolver, SensorResolver],
       validate: false,
     }),
     context: () => ({ em: ORM.em }),
@@ -31,9 +30,6 @@ const main = async () => {
       `Server is running on http://localhost:${PORT}${apolloServer.graphqlPath}`
     );
   });
-
-  //   const post = ORM.em.create(Post, { title: "My Post" });
-  //   await ORM.em.persistAndFlush(post);
 };
 
 main().catch((error) => {

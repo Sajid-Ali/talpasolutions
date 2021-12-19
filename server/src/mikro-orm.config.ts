@@ -1,10 +1,10 @@
 import path from "path";
 import { MikroORM } from "@mikro-orm/core";
 import { __prod__ } from "./constants";
-import { Machine, Post, Sensor } from "./entities";
+import { Machine, Sensor } from "./entities";
 
 export default {
-  entities: [Post, Sensor, Machine ],
+  entities: [Sensor, Machine ],
   migrations: {
     path: path.join(__dirname, "./migrations"),
     pattern: /^[\w-]+\d+\.[tj]s$/,
