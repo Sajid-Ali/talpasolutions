@@ -1,9 +1,9 @@
-import { Machine } from "../entities";
+import { Machine, Sensor } from "../entities";
 import { MyContext } from "src/types";
-import { Resolver, Query, Ctx, Arg, Int, Mutation } from "type-graphql";
+import { Resolver, Query, Ctx, Arg, Int, Mutation, FieldResolver, Root } from "type-graphql";
 import { CreateInput } from "../dto";
 
-@Resolver()
+@Resolver(() => Machine)
 export class MachineResolver {
   @Query(() => [Machine])
   machineList(@Ctx() { em }: MyContext): Promise<Machine[]> {
@@ -51,4 +51,10 @@ export class MachineResolver {
     await em.nativeDelete(Machine, { id });
     return true;
   }
+
+  @FieldResolver(() => [Sensor])
+  async sensors(@Root() machine: Machine, @Ctx() { em }: MyContext): Promise<any[]> {
+    const repo = em.getRepository(Sensor);
+    return repo.find({ machine:  machine.id});
+  } 
 }

@@ -25,6 +25,7 @@ export class Machine {
   @Property({ type: "date", onUpdate: () => new Date() })
   updatedAt = new Date();
 
+  @Field(() => [Sensor], { nullable: true })
   @OneToMany(() => Sensor, (sensor) => [sensor])
   sensors: Sensor[];
 }

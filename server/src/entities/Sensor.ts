@@ -17,6 +17,11 @@ export class Sensor {
   @Property({ type: "date" })
   createdAt = new Date();
 
-  @ManyToOne(() => Sensor)
+  @Field(() => String)
+  @Property({ type: "date", onUpdate: () => new Date() })
+  updatedAt = new Date();
+
+  @Field(() => Machine, { nullable: true })
+  @ManyToOne(() => Machine)
   machine: Machine;
 }
