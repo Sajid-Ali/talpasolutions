@@ -36,6 +36,10 @@ module.exports = {
           name: "[name].[ext]?[hash]",
         },
       },
+      {
+        test: /\.(sass|less|css)$/,
+        loaders: ['vue-style-loader', 'css-loader']
+      }
     ],
   },
   devServer: {

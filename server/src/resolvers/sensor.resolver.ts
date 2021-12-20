@@ -2,7 +2,12 @@ import { MyContext } from "src/types";
 import { Resolver, Query, Ctx, Arg, Int, Mutation } from "type-graphql";
 
 import { Sensor } from "../entities";
-import { CreateSensorInput } from "../dto";
+import {
+  CreateSensorDataInput,
+  CreateSensorInput,
+  SensorDataInput,
+} from "../dto";
+import { SensorDataPoint } from "../entities/SensorDataPoint";
 
 @Resolver()
 export class SensorResolver {
@@ -62,5 +67,35 @@ export class SensorResolver {
     if (!sensor) return null;
     await em.nativeDelete(Sensor, { id });
     return true;
+  }
+
+  @Mutation(() => SensorDataPoint, { nullable: true })
+  async createSensorDataPoint(
+    @Arg("input", () => CreateSensorDataInput) input: CreateSensorDataInput,
+    @Ctx() { em }: MyContext
+  ): Promise<SensorDataPoint> {
+    const sensorDataPoint = em.create(SensorDataPoint, {
+      value: input?.value,
+    });
+    await em.persistAndFlush(sensorDataPoint);
+    return sensorDataPoint;
+  }
+
+  @Query(() => [SensorDataPoint])
+  sensorData(
+    @Arg("input", () => SensorDataInput) input: SensorDataInput,
+    @Ctx() { em }: MyContext
+  ): Promise<SensorDataPoint[]> {
+    return em.find(SensorDataPoint, {
+      $or: [
+        { id: input.id},
+        {
+          $and: [
+            { createdAt: { $gte: input.from } },
+            { createdAt: { $lte: input.to } },
+          ]
+        }
+      ]
+    });
   }
 }

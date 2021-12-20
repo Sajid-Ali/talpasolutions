@@ -1,10 +1,13 @@
 import Vue from "vue";
 
 import "isomorphic-fetch";
+import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
+// Import Bootstrap an BootstrapVue CSS files (order is important)
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
 
 import { ApolloClient, createNetworkInterface } from "apollo-client";
 import {
-  SubscriptionClient,
   addGraphQLSubscriptions,
 } from "subscriptions-transport-ws";
 
@@ -12,13 +15,8 @@ const networkInterface = createNetworkInterface({
   uri: "http://localhost:4001/graphql",
 });
 
-const wsClient = new SubscriptionClient("ws://localhost:4001/subscriptions", {
-  reconnect: true,
-});
-
 const networkInterfaceWithSubscriptions = addGraphQLSubscriptions(
-  networkInterface,
-  wsClient
+  networkInterface
 );
 
 const apolloClient = new ApolloClient({
@@ -28,6 +26,11 @@ const apolloClient = new ApolloClient({
 
 import VueApollo from "vue-apollo";
 Vue.use(VueApollo);
+
+// Make BootstrapVue available throughout your project
+Vue.use(BootstrapVue)
+// Optionally install the BootstrapVue icon components plugin
+Vue.use(IconsPlugin)
 
 let loading = 0;
 
