@@ -7,7 +7,7 @@ import { CreateSensorInput } from "../dto";
 @Resolver()
 export class SensorResolver {
   @Query(() => [Sensor])
-  SensorList(@Ctx() { em }: MyContext): Promise<Sensor[]> {
+  sensorList(@Ctx() { em }: MyContext): Promise<Sensor[]> {
     return em.find(Sensor, {});
   }
 
@@ -19,12 +19,23 @@ export class SensorResolver {
     return em.findOne(Sensor, { id });
   }
 
+  @Query(() => [Sensor], { nullable: true })
+  getSensorByMachineId(
+    @Arg("machine_id", () => Int) machine_id: number,
+    @Ctx() { em }: MyContext
+  ): Promise<Sensor[] | null> {
+    return em.find(Sensor, { machine: machine_id });
+  }
+
   @Mutation(() => Sensor, { nullable: true })
   async createSensor(
     @Arg("input", () => CreateSensorInput) input: CreateSensorInput,
     @Ctx() { em }: MyContext
   ): Promise<Sensor> {
-    const sensor = em.create(Sensor, { name: input?.name, machine: input?.machine_id });
+    const sensor = em.create(Sensor, {
+      name: input?.name,
+      machine: input?.machine_id,
+    });
     await em.persistAndFlush(sensor);
     return sensor;
   }
